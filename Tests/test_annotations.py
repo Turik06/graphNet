@@ -139,3 +139,20 @@ def test_AFigure_initialization_and_build(env):
     assert dpg.get_item_type(text_id) == "mvAppItemType::mvText"
     assert dpg.get_item_configuration(text_id)["show"] is True
     assert dpg.get_value(text_id) == "Figure 2"
+
+def test_AFigure_get(env):
+    class DummyNode:
+        my_fig = "test_figure_data"
+
+    with dpg.node_editor(parent=env):
+        with dpg.node() as node_id:
+            dpg.set_item_user_data(node_id, DummyNode())
+            with dpg.node_attribute(label="my_fig") as attr_id:
+                input_id = AFigure.build(parent=attr_id, label="my_fig")
+                new_attr_id = dpg.get_item_parent(input_id)
+                dpg.set_item_user_data(new_attr_id, [new_attr_id])
+    
+    assert AFigure.get(input_id) == "test_figure_data"
+    
+    dpg.set_item_user_data(new_attr_id, None)
+    assert AFigure.get(input_id) is None
