@@ -119,3 +119,23 @@ def test_AInteger_negative_value(env):
     input_id = AInteger.build(parent=env)
     assert AInteger.set(input_id, -10) is True
     assert AInteger.get(input_id) == -10
+
+def test_AFigure_initialization_and_build(env):
+    
+    img_id_1 = AFigure.build(parent=env, label="Figure 1")
+    assert isinstance(img_id_1, (int, str))
+    assert img_id_1 in dpg.get_all_items()
+    assert dpg.does_alias_exist("figure_texture_registry")
+    
+    assert dpg.get_item_configuration(img_id_1)["show"] is True
+
+    img_id_2 = AFigure(display=False).build(parent=env, label="Figure 2")
+    assert isinstance(img_id_2, (int, str))
+    assert img_id_2 in dpg.get_all_items()
+    assert dpg.get_item_configuration(img_id_2)["show"] is False
+    
+    children = dpg.get_item_children(env, 1)
+    text_id = children[children.index(img_id_2) - 1]
+    assert dpg.get_item_type(text_id) == "mvAppItemType::mvText"
+    assert dpg.get_item_configuration(text_id)["show"] is True
+    assert dpg.get_value(text_id) == "Figure 2"
