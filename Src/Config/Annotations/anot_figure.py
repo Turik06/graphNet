@@ -35,8 +35,12 @@ class AFigure(AParam):
             parent="figure_texture_registry",
         )
 
-        dpg.add_text(kwargs.get("label") or "Figure", show=not self.display)
-        return dpg.add_image(tex_id, user_data=tex_id, show=self.display)
+        parent_kw = {}
+        if "parent" in kwargs and DPGType(kwargs["parent"]) != DPGType.NODE:
+            parent_kw["parent"] = kwargs["parent"]
+
+        dpg.add_text(kwargs.get("label") or "Figure", show=not self.display, **parent_kw)
+        return dpg.add_image(tex_id, user_data=tex_id, show=self.display, **parent_kw)
 
 
     @staticmethod
