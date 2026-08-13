@@ -156,3 +156,26 @@ def test_AFigure_get(env):
     
     dpg.set_item_user_data(new_attr_id, None)
     assert AFigure.get(input_id) is None
+
+def test_AFigure_set(env):
+    input_id = AFigure.build(parent=env)
+    
+    fig, ax = plt.subplots()
+    ax.plot([1, 2], [1, 2])
+    fig_num = fig.number
+    
+    assert AFigure.set(input_id, fig) is True
+    
+    tex_id = dpg.get_item_user_data(input_id)
+    tex_config = dpg.get_item_configuration(tex_id)
+    
+    assert tex_config["width"] > 0
+    assert tex_config["height"] > 0
+    assert fig_num not in plt.get_fignums()
+    
+    input_id_hidden = AFigure(display=False).build(parent=env)
+    fig2, ax2 = plt.subplots()
+    ax2.plot([1, 2], [3, 4])
+    fig2_num = fig2.number
+    assert AFigure.set(input_id_hidden, fig2) is True
+    assert fig2_num not in plt.get_fignums()
