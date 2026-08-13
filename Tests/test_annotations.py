@@ -5,6 +5,11 @@ import dearpygui.dearpygui as dpg
 
 from Src.Config.Annotations import *
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from Src.Config.Annotations.anot_figure import AFigure
+
 class DummyEnum(enum.Enum):
     FIRST = 'first'
     SECOND = 'second'
